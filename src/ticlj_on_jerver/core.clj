@@ -4,4 +4,5 @@
 
 (defn -main [& args]
   (-> server (set-public-directory "public"))
+  (GET "/testing" "This is a test")
   (-> server (run)))
