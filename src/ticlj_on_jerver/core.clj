@@ -1,12 +1,5 @@
 (ns ticlj-on-jerver.core
-  (import com.jerver.http.server.Server))
+  (:use [ticlj-on-jerver.controller.server :only [server run-with-public-directory]]))
 
-(def server
-  (Server. 11111))
-
-(defn run-server []
-  (.run server))
-
-(defn run-with-public-directory [directory]
-  (.setPublicDirectory server directory)
-  (run-server))
+(defn -main [& args]
+  (-> server (run-with-public-directory "public")))
