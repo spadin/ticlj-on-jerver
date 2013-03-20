@@ -1,0 +1,149 @@
+body {
+  background: #E6E6E6;
+  font-family: sans-serif;
+  width: 800px;
+  margin: 0 auto;
+}
+
+h1.title {
+  text-align: center;
+}
+
+a.new-game {
+  display: block;
+  text-align: center;
+  padding-top: 20px;
+  color: #00B3FA;
+  clear: both;
+}
+
+div#start-game {
+  text-align: center;
+}
+
+form#new-game label {
+  margin-top: 10px;
+}
+
+form#new-game input.submit {
+  display: block;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+form#new-game .label-group {
+  padding-bottom: 10px;
+}
+
+form#new-game .label-group label {
+  padding-right: 10px;
+  line-height: 30px;
+}
+
+.board-container {
+  width: 350px; height: 350px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.board {
+  width: 360px; height: 360px;
+  margin-top: -5px;
+  margin-left: -45px;
+  list-style: none;
+}
+
+.board li {
+  display: inline-block;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  float: left;
+  border: 5px solid black;
+  background: #E6E6E6;
+  text-align: center;
+  font-size: 36px;
+}
+
+.board li span {
+  display: inline-block;
+}
+
+.board li a {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  text-indent: -9999px;
+  padding-top: -20px;
+}
+
+.board li a:hover {
+  background-color: #d9d9d9;
+}
+
+.board-type-three-by-three-game li {
+  width: 120px; height: 120px;
+}
+
+.board-type-four-by-four-game li {
+  width: 90px; height: 90px;
+}
+
+.board-type-three-by-three-game li span {
+  padding-top: 30px;
+}
+
+.board-type-four-by-four-game li span {
+  padding-top: 20px;
+}
+
+.players {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 350px;
+  margin: 0 auto;
+  border: 1px solid #C7C7C7;
+  margin-bottom: 10px;
+  float: right;
+  clear: right;
+}
+
+.players h2 {
+  text-align: center;
+  margin: 0;
+  border-bottom: 1px solid #c7c7c7;
+  padding: 5px;
+}
+
+.players span {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  text-align: center;
+  display: inline-block;
+  padding: 20px 10px;
+  width: 174px;
+}
+
+.players .X {
+  border-right: 1px solid #c7c7c7;
+}
+
+.players .current {
+  background-color: #d9d9d9;
+}
+
+.winning-message-holder {
+  width: 350px;
+  height: 40px;
+  margin: 0 auto;
+  padding-bottom: 10px;
+  float: right;
+  clear: right;
+}
+
+.winning-message {
+  width: 348px;
+  height: 38px;
+  border: 1px solid #c7c7c7;
+  line-height: 38px;
+  text-align: center;
+}
