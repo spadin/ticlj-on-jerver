@@ -12,8 +12,3 @@
 (defn run [server]
   (-> server (.run))
   server)
-
-(defn run-with-public-directory [server directory]
-  (-> server
-      (set-public-directory directory)
-      (run)))
