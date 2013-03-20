@@ -6,11 +6,11 @@
   (com.jerver.http.server.ServerImpl. *port*))
 
 (defn set-public-directory [server directory]
-  (.setPublicDirectory server directory)
+  (-> server (.setPublicDirectory directory))
   server)
 
 (defn run [server]
-  (.run server)
+  (-> server (.run))
   server)
 
 (defn run-with-public-directory [server directory]
