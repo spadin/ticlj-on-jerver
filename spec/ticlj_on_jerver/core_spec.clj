@@ -2,6 +2,10 @@
   (:require [speclj.core :refer :all]
             [ticlj-on-jerver.core :refer :all]))
 
-(describe "a test"
-  (it "FIXME, I fail."
-    (should= 1 1)))
+(describe "ticlj-on-jerver.core"
+  (context "-main"
+    (it "sets public directory then runs server"
+      (with-redefs [ticlj-on-jerver.api.server/set-public-directory (fn [server dir] (print "set-public-directory:" dir ""))
+                    ticlj-on-jerver.api.server/run (fn [server] (print "run "))]
+        (should-contain "set-public-directory: public run"
+                        (with-out-str (-main)))))))
