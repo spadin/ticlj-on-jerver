@@ -15,3 +15,10 @@ the standard Java libraries and [Hiccup][5] for rendering templates.
 # Running specs
 
     $ lein spec
+
+
+[1]: https://github.com/spadin/taclj
+[2]: https://github.com/spadin/Jerver
+[3]: http://www.joodoweb.com/
+[4]: https://github.com/spadin/ticlj
+[5]: https://github.com/weavejester/hiccup
