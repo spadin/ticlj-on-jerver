@@ -1,8 +1,8 @@
-(ns ticlj-on-jerver.controller.server-spec
+(ns ticlj-on-jerver.api.server-spec
   (:use [speclj.core]
-        [ticlj-on-jerver.controller.server]))
+        [ticlj-on-jerver.api.server]))
 
-(describe "ticlj-on-jerver.controller.server"
+(describe "ticlj-on-jerver.api.server"
   (with sample-server (reify com.jerver.http.server.Server
                          (setPublicDirectory [_ directory]
                            (println directory))

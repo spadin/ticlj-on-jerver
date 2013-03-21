@@ -1,4 +1,4 @@
-(ns ticlj-on-jerver.controller.server)
+(ns ticlj-on-jerver.api.server)
 
 (def ^:dynamic *port* 11111)
 
