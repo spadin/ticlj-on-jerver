@@ -23,5 +23,5 @@
                (load-view "test")))
 
     (it "returns an html string for the template"
-      (should= "<div>test</div>"
-               (render-view "test")))))
+      (should-contain "<div>test</div>"
+                      (render-view "test")))))
