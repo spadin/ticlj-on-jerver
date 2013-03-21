@@ -10,8 +10,8 @@
                            (println "run"))))
 
   (it "returns a ServerImpl instance"
-    (should= com.jerver.http.server.ServerImpl
-             (.getClass server)))
+    (should (instance? com.jerver.http.server.Server
+                       server)))
 
   (it "calls ServerImpl#setPublicDirectory"
     (let [server @sample-server]

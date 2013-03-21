@@ -14,8 +14,8 @@
                          (println "RENDER" request response))))
 
   (it "returns an instance of Router"
-    (should= com.jerver.http.route.RouterImpl
-             (.getClass router)))
+    (should (instance? com.jerver.http.route.Router
+                       router)))
 
   (it "calls Router#addRoute with a String"
     (let [router @sample-router
