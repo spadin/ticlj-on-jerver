@@ -20,17 +20,19 @@
       (should-contain "POST /"
                       (with-out-str (defroutes)))))
 
-  (it "determines that a header param is empty"
-    (let [request @proper-request]
-      (should= false
-               (empty-param? request "game-type"))))
+  (context "#empty-param?"
+    (it "determines that a header param is empty"
+      (let [request @proper-request]
+        (should= false
+                 (empty-param? request "game-type"))))
 
-  (it "determines that a header param is not empty"
-    (let [request @improper-request]
-      (should= true
-               (empty-param? request "game-type"))))
+    (it "determines that a header param is not empty"
+      (let [request @improper-request]
+        (should= true
+                 (empty-param? request "game-type")))))
 
-  (it "determines that new game parameters have been passed"
-    (let [request @proper-request]
-      (should= true
-               (game-create-params-set? request)))))
+  (context "#game-create-params-set?"
+    (it "determines that new game parameters have been passed"
+      (let [request @proper-request]
+        (should= true
+                 (game-create-params-set? request))))))
