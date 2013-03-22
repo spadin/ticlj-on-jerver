@@ -2,8 +2,7 @@
   (:use [ticlj-on-jerver.api.resolver :only [resolver]]
         [ticlj-on-jerver.api.response :only [set-body set-cookie set-status-code add-header]]
         [hiccup.core])
-  (:require [ticlj-on-jerver.render-context]
-            [ticlj-on-jerver.view.helper]))
+  (:require [ticlj-on-jerver.view.helper]))
 
 (def ^:dynamic *view-directory* "src/ticlj_on_jerver/view")
 
@@ -24,10 +23,9 @@
   (let [view (eval-view view-name)]
     (html view)))
 
-(defn render [view-name]
+(defn render [response view-name]
   (let [rendered-view (render-view view-name)]
-    (resolver (fn [request response]
-      (-> response
-          (set-status-code 200)
-          (add-header "Content-Type" "text/html")
-          (set-body rendered-view))))))
+    (-> response
+        (set-status-code 200)
+        (add-header "Content-Type" "text/html")
+        (set-body rendered-view))))
