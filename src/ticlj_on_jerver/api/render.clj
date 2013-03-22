@@ -14,11 +14,10 @@
   (read-string (load-view view-name)))
 
 (defn eval-view [view-name]
-  (let [view-ns 'ticlj-on-jerver.render-context
-        body (read-view view-name)]
-    (require view-ns)
-    (binding [*ns* (the-ns view-ns)
-              ticlj-on-jerver.render-context/*view-body* body]
+  (let [body (read-view view-name)]
+    (require 'ticlj-on-jerver.view.helper)
+    (binding [*ns* (the-ns 'ticlj-on-jerver.view.helper)
+              ticlj-on-jerver.view.helper/*view-body* body]
       (eval (read-view "layout")))))
 
 (defn render-view [view-name]

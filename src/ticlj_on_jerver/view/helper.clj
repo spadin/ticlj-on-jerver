@@ -7,6 +7,8 @@
     [ticlj.game.protocol :only [empty-board-state]]
     [clojure.string :only [split]]))
 
+(def ^:dynamic *view-body* "")
+
 (defn get-game-types []
   (map (fn [game-type]
          (assoc game-type :uri-value (second (split (:value game-type) #"\/"))))
