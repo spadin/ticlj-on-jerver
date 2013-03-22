@@ -3,7 +3,7 @@
         [ticlj-on-jerver.api.render]))
 
 (describe "ticlj-on-jerver.api.render"
-  (with spec-view-directory "spec/ticlj_on_jerver/resources/view")
+  (with spec-view-directory "spec/resources/view")
 
   (around [it]
     (binding [*view-directory* @spec-view-directory]
@@ -15,7 +15,7 @@
                          (render "test"))))
 
     (it "can set the *view-directory*"
-      (should= "spec/ticlj_on_jerver/resources/view"
+      (should= "spec/resources/view"
                *view-directory*))
 
     (it "loads a test template"
