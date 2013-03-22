@@ -6,7 +6,7 @@
   (with sample-response (reify com.jerver.http.response.Response
                           (setStatusCode [_ status-code]
                             (println "set-status-code"))
-                          (appendHeader [_body header]
+                          (appendHeader [_ header]
                             (println "add-header: " header))
                           (setBody [_ body]
                             (println "set-body"))))

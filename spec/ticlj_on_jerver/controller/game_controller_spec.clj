@@ -3,6 +3,14 @@
         [ticlj-on-jerver.controller.game-controller]))
 
 (describe "ticlj-on-jerver.controller.game-controller"
+  (with sample-response (reify com.jerver.http.response.Response
+                          (setStatusCode [_ status-code]
+                            (println "set-status-code"))
+                          (appendHeader [_ header]
+                            (println "add-header: " header))
+                          (setBody [_ body]
+                            (println "set-body"))))
+
   (with proper-request
     (reify com.jerver.http.request.Request
       (getParam [_ param-key]
@@ -35,4 +43,25 @@
     (it "determines that new game parameters have been passed"
       (let [request @proper-request]
         (should= true
-                 (game-create-params-set? request))))))
+                 (game-create-params-set? request)))))
+
+  (context "#generate-game-cookie-string"
+    (it "returns a cookie-ready string"
+      (let [game {:game-type "a"
+                  :x-player  "b"
+                  :o-player  "c"
+                  :board-str "d"}]
+        (should= "game-type=a&x-player=b&o-player=c&board-str=d"
+                 (game-cookie-str game)))))
+
+  (context "#set-game-cookie"
+    (it "sets the game cookiie"
+      (let [game {:game-type "a"
+                  :x-player  "b"
+                  :o-player  "c"
+                  :board-str "d"}
+            response @sample-response]
+        (with-redefs [ticlj-on-jerver.api.response/set-cookie
+                      (fn [response k v] k)]
+          (should= "game"
+                   (-> response (set-game-cookie game))))))))
