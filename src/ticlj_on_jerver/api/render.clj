@@ -21,7 +21,6 @@
               ticlj-on-jerver.render-context/*view-body* body]
       (eval (read-view "layout")))))
 
-
 (defn render-view [view-name]
   (let [view (eval-view view-name)]
     (html view)))
