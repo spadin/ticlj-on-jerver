@@ -1,4 +1,5 @@
-(ns ticlj-on-jerver.api.router)
+(ns ticlj-on-jerver.api.router
+  (:use [ticlj-on-jerver.api.resolver :only [resolver]]))
 
 (def router
   com.jerver.http.route.RouterImpl/INSTANCE)
@@ -7,7 +8,7 @@
   (-> router (.addRoute method uri route)))
 
 (defn GET [uri route]
-  (-> router (add-route "GET" uri route)))
+  (-> router (add-route "GET" uri (resolver route))))
 
 (defn POST [uri route]
-  (-> router (add-route "POST" uri route)))
+  (-> router (add-route "POST" uri (resolver route))))

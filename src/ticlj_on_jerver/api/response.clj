@@ -16,3 +16,8 @@
 (defn set-body [response body]
   (-> response (.setBody (.getBytes body)))
   response)
+
+(defn redirect [response uri]
+  (-> response (set-status-code 301)
+               (add-header "Location" uri))
+  response)

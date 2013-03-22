@@ -33,4 +33,9 @@
   (it "calls #setBody"
     (let [response @sample-response]
       (should-contain "set-body"
-                      (with-out-str (-> response (set-body "response-body")))))))
+                      (with-out-str (-> response (set-body "response-body"))))))
+
+  (it "calls #appendHeader with 'Location: http://google.com"
+    (let [response @sample-response]
+      (should-contain "Location: http://google.com"
+                      (with-out-str (-> response (redirect "http://google.com")))))))
