@@ -13,7 +13,13 @@
                                              get-player-of-type]]
         [ticlj.game                   :only [available-game-types
                                              get-game-of-type]]
-        [clojure.string               :only [split]]))
+        [clojure.string               :only [split]]
+
+        [ticlj.game.protocol :only [empty-board-state
+                                    set-mark-at-index
+                                    next-possible-mark
+                                    gameover? winner]]
+        [ticlj.player.protocol :only [move]]))
 
 (defn empty-param? [request param]
   (empty? (-> request (get-param param))))
@@ -75,29 +81,6 @@
       (let [cookie-pairs (split cookie-str #"&")]
         (build-key-val-map cookie-pairs)))))
 
-;(defn handle-game-move []
-  ;(if-let [game-cookie (get-game-cookie *request*)]
-    ;(do
-      ;(let [game (get-game-of-uri-value (:game-type game-cookie))
-            ;board-state (convert-string-to-board-state (:board-str game-cookie))
-            ;gameover? (gameover? game board-state)
-            ;player-str-coll {:X (:x-player game-cookie) :O (:o-player game-cookie)}
-            ;player-str (get player-str-coll (next-possible-mark game board-state))
-            ;player (get-player-of-uri-value player-str)
-            ;move (if-not (nil? (:choice (:params *request*)))
-                   ;(Integer/parseInt (:choice (:params *request*)))
-                   ;(move player game board-state))
-            ;new-board-state (if gameover? board-state (set-mark-at-index game board-state move))
-            ;new-board-str (convert-board-state-to-string new-board-state)]
-        ;(assoc
-          ;(redirect "/game/play")
-          ;:cookies (apply
-                     ;game-cookie-map
-                     ;(vals (assoc
-                             ;game-cookie
-                             ;:board-str new-board-str))))))
-    ;(redirect "/")))
-
 ; Route handlers
 ; ==============
 
@@ -110,10 +93,52 @@
     (-> response (redirect "/"))))
 
 (defn handle-game-play [request response]
-  (if-let [game (-> request (get-game-from-cookie))]
-    (-> response (render "play" game))
+  (if-let [game-cookie (-> request (get-game-from-cookie))]
+    (let [game (get-game-of-uri-value (:game-type game-cookie))
+          board-state (board-str->state (:board-str game-cookie))
+          gameover? (gameover? game board-state)
+          winner (winner game board-state)
+          player-str-coll {:X (:x-player game-cookie) :O (:o-player game-cookie)}
+          next-mark (next-possible-mark game board-state)
+          player-str (get player-str-coll next-mark)
+          meta-refresh (if (and (not gameover?) (not= "human-player" player-str)) {:seconds 1 :url "/game/move"} nil)
+          interactive-move? (if (and (not gameover?) (nil? meta-refresh)) true false)
+          winning-message (if (and gameover? winner)
+                            (str "Game over, " (name winner) " has won.")
+                            (if gameover?
+                              (str "Game over, tied game")
+                              nil))]
+      (-> response (render "play" (assoc game-cookie
+                                         :meta-refresh meta-refresh
+                                         :interactive-move? interactive-move?
+                                         :gameover? gameover?
+                                         :winner winner
+                                         :x-player (:x-player game-cookie)
+                                         :o-player (:o-player game-cookie)
+                                         :next-mark (if-not gameover? next-mark nil)
+                                         :winning-message winning-message))))
+    (-> response (redirect "/"))))
+
+(defn handle-game-move [request response]
+  (if-let [game-cookie (get-game-from-cookie request)]
+    (let [game (get-game-of-uri-value (:game-type game-cookie))
+          board-state (board-str->state (:board-str game-cookie))
+          gameover? (gameover? game board-state)
+          player-str-coll {:X (:x-player game-cookie) :O (:o-player game-cookie)}
+          player-str (get player-str-coll (next-possible-mark game board-state))
+          player (get-player-of-uri-value player-str)
+          move (if-not (nil? (-> request (get-param "choice")))
+                 (Integer/parseInt (-> request (get-param "choice")))
+                 (move player game board-state))
+          new-board-state (if gameover? board-state (set-mark-at-index game board-state move))
+          new-board-str (board-state->str new-board-state)]
+      (-> response
+          (set-game-cookie (assoc game-cookie
+                                  :board-str new-board-str))
+          (redirect "/game/play")))
     (-> response (redirect "/"))))
 
 (defn defroutes []
   (POST "/game/create" handle-game-create)
-  (GET  "/game/play"   handle-game-play))
+  (GET  "/game/play"   handle-game-play)
+  (GET  "/game/move"   handle-game-move))
