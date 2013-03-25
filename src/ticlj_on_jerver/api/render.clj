@@ -1,6 +1,7 @@
 (ns ticlj-on-jerver.api.render
   (:use [ticlj-on-jerver.api.resolver :only [resolver]]
-        [ticlj-on-jerver.api.response :only [set-body set-cookie set-status-code add-header]]
+        [ticlj-on-jerver.api.response :only [set-body set-cookie
+                                             set-status-code add-header]]
         [hiccup.core])
   (:require [ticlj-on-jerver.view.helper]))
 

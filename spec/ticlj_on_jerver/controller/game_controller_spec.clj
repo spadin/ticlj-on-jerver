@@ -5,7 +5,7 @@
 (describe "ticlj-on-jerver.controller.game-controller"
   (with sample-response (reify com.jerver.http.response.Response
                           (setStatusCode [_ status-code]
-                            (println "set-status-code"))
+                            (println "et-status-code"))
                           (appendHeader [_ header]
                             (println "add-header: " header))
                           (setBody [_ body]
@@ -14,7 +14,10 @@
   (with proper-request
     (reify com.jerver.http.request.Request
       (getParam [_ param-key]
-        "some-value")))
+        (case param-key
+          "game-type" "three-by-three-game"
+          "x-player" "human-player"
+          "o-player" "human-player"))))
 
   (with improper-request
     (reify com.jerver.http.request.Request
@@ -55,27 +58,55 @@
                  (game-cookie-str game)))))
 
   (context "#set-game-cookie"
-    (it "sets the game cookiie"
+    (it "sets the game cookie"
       (let [game {:game-type "a"
                   :x-player  "b"
                   :o-player  "c"
                   :board-str "d"}
             response @sample-response]
         (with-redefs [ticlj-on-jerver.api.response/set-cookie
-                      (fn [response k v] k)]
+                      (fn [response k v] (print k))]
           (should= "game"
-                   (-> response (set-game-cookie game)))))))
+                   (with-out-str (-> response (set-game-cookie game))))))))
 
   (context "#create-game-from-params"
     (it "returns a game object"
       (let [request @proper-request]
-        (should= {:game-type "some-value"
-                  :x-player  "some-value"
-                  :o-player  "some-value"
+        (should= {:game-type "three-by-three-game"
+                  :x-player  "human-player"
+                  :o-player  "human-player"
                   :board-str "---------"}
                  (create-game-from-params request))))
 
     (it "returns nil"
       (let [request @improper-request]
         (should= nil
-                 (create-game-from-params request))))))
+                 (create-game-from-params request)))))
+
+  (context "#empty-board-str"
+    (it "returns a board with 9 spots for a three-by-three game-type"
+      (should= 9
+               (count (empty-board-str "three-by-three"))))
+
+    (it "returns a board with 16 spots for a four-by-four game-type"
+      (should= 16
+               (count (empty-board-str "four-by-four")))))
+
+  (context "#get-game-of-uri-value"
+    (it "returns an instance of a game"
+      (should (instance? ticlj.game.protocol.Game
+                         (get-game-of-uri-value "three-by-three-game")))))
+
+  (context "#get-player-of-uri-value"
+    (it "returns an instance of a player"
+      (should (instance? ticlj.player.protocol.Player
+                         (get-player-of-uri-value "human-player")))))
+
+  (context "#board-str->state"
+    (it "converts a string of an empty board to a board-state"
+      (should= [:# :# :# :# :# :# :# :# :#]
+               (board-str->state "---------")))
+
+    (it "converts a second string board to a board-state"
+      (should= [:X :O :# :# :# :# :# :# :#]
+               (board-str->state "XO-------")))))

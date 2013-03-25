@@ -8,6 +8,7 @@
     [clojure.string :only [split]]))
 
 (def ^:dynamic *view-body* "")
+(def ^:dynamic *view-context* "")
 
 (defn get-game-types []
   (map (fn [game-type]
