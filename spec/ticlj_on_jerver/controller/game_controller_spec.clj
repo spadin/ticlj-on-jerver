@@ -64,4 +64,18 @@
         (with-redefs [ticlj-on-jerver.api.response/set-cookie
                       (fn [response k v] k)]
           (should= "game"
-                   (-> response (set-game-cookie game))))))))
+                   (-> response (set-game-cookie game)))))))
+
+  (context "#create-game-from-params"
+    (it "returns a game object"
+      (let [request @proper-request]
+        (should= {:game-type "some-value"
+                  :x-player  "some-value"
+                  :o-player  "some-value"
+                  :board-str "---------"}
+                 (create-game-from-params request))))
+
+    (it "returns nil"
+      (let [request @improper-request]
+        (should= nil
+                 (create-game-from-params request))))))

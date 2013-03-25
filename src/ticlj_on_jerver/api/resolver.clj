@@ -9,8 +9,3 @@
 
 (defn resolver [callback]
   (Resolver. callback))
-
-;(defn redirect [uri]
-  ;(resolver (fn [_ response]
-    ;(-> response (set-status-code 301)
-                 ;(add-header "Location" uri)))))
