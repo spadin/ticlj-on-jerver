@@ -138,7 +138,13 @@
           (redirect "/game/play")))
     (-> response (redirect "/"))))
 
+(defn handle-game-reset [request response]
+  (-> response
+      (set-game-cookie "")
+      (redirect "/")))
+
 (defn defroutes []
   (POST "/game/create" handle-game-create)
   (GET  "/game/play"   handle-game-play)
-  (GET  "/game/move"   handle-game-move))
+  (GET  "/game/move"   handle-game-move)
+  (GET  "/game/reset"  handle-game-reset))
