@@ -1,6 +1,6 @@
 [:div {:class "game"}
   [:div {:class "players"}
-    [:h2 "Players 2"]
+    [:h2 "Players"]
     [:div
       [:span {:class "X"} [:strong "X"] [:br] (get-player-name (:x-player *view-context*))]
       [:span {:class "O"} [:strong "O"] [:br] (get-player-name (:o-player *view-context*))]]]
