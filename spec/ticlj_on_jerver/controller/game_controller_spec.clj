@@ -1,5 +1,6 @@
 (ns ticlj-on-jerver.controller.game-controller-spec
   (:use [speclj.core]
+        [ticlj-on-jerver.view.helper :only [*view-context*]]
         [ticlj-on-jerver.controller.game-controller]))
 
 (describe "ticlj-on-jerver.controller.game-controller"
@@ -17,7 +18,12 @@
         (case param-key
           "game-type" "three-by-three-game"
           "x-player" "human-player"
-          "o-player" "human-player"))))
+          "o-player" "human-player"))
+      (getHeader [_ header-key]
+        (case header-key
+          "Cookie" "game=game-type=three-by-three-game&x-player=human-player&o-player=human-player&board-str=---------"
+        ))
+      ))
 
   (with improper-request
     (reify com.jerver.http.request.Request
@@ -109,4 +115,26 @@
 
     (it "converts a second string board to a board-state"
       (should= [:X :O :# :# :# :# :# :# :#]
-               (board-str->state "XO-------")))))
+               (board-str->state "XO-------"))))
+
+  (context "#set-game-in-view-context"
+    (it "attaches game props to *view-context*"
+      (let [game {:game-type "three-by-three-game"
+                  :x-player  "human-player"
+                  :o-player  "human-player"
+                  :board-str "---------"}
+            view-context {}]
+
+        (should= game
+                 (:game (set-game-in-view-context view-context game))))))
+
+  (context "#get-game-from-cookie"
+    (it "retrieves game props from cookie"
+      (let [request @proper-request
+            expected-game {:game-type "three-by-three-game"
+                           :x-player  "human-player"
+                           :o-player  "human-player"
+                           :board-str "---------"}]
+        (should= expected-game
+                 (-> request (get-game-from-cookie)))))))
+

@@ -24,9 +24,13 @@
   (let [view (eval-view view-name)]
     (html view)))
 
-(defn render [response view-name]
-  (let [rendered-view (render-view view-name)]
-    (-> response
-        (set-status-code 200)
-        (add-header "Content-Type" "text/html")
-        (set-body rendered-view))))
+(defn render
+  ([response view-name view-context]
+   (binding [ticlj-on-jerver.view.helper/*view-context* view-context]
+     (-> response (render view-name))))
+  ([response view-name]
+    (let [rendered-view (render-view view-name)]
+      (-> response
+          (set-status-code 200)
+          (add-header "Content-Type" "text/html")
+          (set-body rendered-view)))))

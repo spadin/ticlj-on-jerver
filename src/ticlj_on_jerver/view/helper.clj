@@ -8,7 +8,7 @@
     [clojure.string :only [split]]))
 
 (def ^:dynamic *view-body* "")
-(def ^:dynamic *view-context* "")
+(def ^:dynamic *view-context* {})
 
 (defn get-game-types []
   (map (fn [game-type]
@@ -19,6 +19,18 @@
   (map (fn [player-type]
          (assoc player-type :uri-value (second (split (:value player-type) #"\/"))))
        available-player-types))
+
+(defn get-game-type []
+  (:game-type *view-context*))
+
+(defn get-board-str []
+  (:board-str *view-context*))
+
+(defn get-player-name [player-type-str]
+  (let [player-types (get-player-types)]
+    (:name (first (filter (fn [player-type]
+                            (= (:uri-value player-type) player-type-str))
+                          player-types)))))
 
 (defn dashes-to-underscore [s]
   (clojure.string/replace s #"-" "_"))
