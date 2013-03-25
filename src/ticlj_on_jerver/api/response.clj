@@ -18,6 +18,6 @@
   response)
 
 (defn redirect [response uri]
-  (-> response (set-status-code 301)
+  (-> response (set-status-code 302)
                (add-header "Location" uri))
   response)
